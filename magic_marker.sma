@@ -1,8 +1,9 @@
 #include <amxmodx>
 #include <amxmisc>
 #include <fakemeta>
+#include <engine>
 #include <xs>
-//test
+
 #define PLUGIN "Magic Marker"
 #define VERSION "3.1"
 #define AUTHOR "stupok69"
