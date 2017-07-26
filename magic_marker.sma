@@ -2,7 +2,7 @@
 #include <amxmisc>
 #include <fakemeta>
 #include <xs>
-
+//test
 #define PLUGIN "Magic Marker"
 #define VERSION "3.1"
 #define AUTHOR "stupok69"
@@ -17,11 +17,11 @@ new bool:is_holding[MAX_PLAYERS+1]
 
 new spriteid
 
+native jbe_is_user_chief(id);
+
 public plugin_init()
 {
 	register_plugin(PLUGIN, VERSION, AUTHOR)
-	register_clcmd("+paint", "paint_handler", USAGE_LEVEL, "Paint on the walls!")
-	register_clcmd("-paint", "paint_handler", USAGE_LEVEL, "Paint on the walls!")
 	register_forward(FM_PlayerPreThink, "forward_FM_PlayerPreThink", 0)
 }
 
@@ -30,33 +30,11 @@ public plugin_precache()
 	spriteid = precache_model("sprites/lgtning.spr")
 }
 
-public paint_handler(id, level, cid)
-{
-	if(!cmd_access(id, level, cid, 1))
-		return PLUGIN_HANDLED
-	
-	if(!is_user_alive(id))
-	{
-		client_print(id, print_chat, "* You cannot use the magic marker when you are dead.")
-		return PLUGIN_HANDLED
-	}
-	
-	static cmd[2]
-	read_argv(0, cmd, 1)
-	
-	switch(cmd[0])
-	{
-		case '+': is_drawing[id] = true
-		case '-': is_drawing[id] = false
-	}
-	return PLUGIN_HANDLED
-}
-
 public forward_FM_PlayerPreThink(id)
 {
 	if(prethink_counter[id]++ > 5)
 	{
-		if(is_drawing[id] && !is_aiming_at_sky(id))
+		if(entity_get_int(id,EV_INT_button) & IN_USE && !is_aiming_at_sky(id) && is_user_alive(id) && jbe_is_user_chief(id))
 		{
 			static Float:cur_origin[3], Float:distance
 
